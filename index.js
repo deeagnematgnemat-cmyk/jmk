@@ -231,6 +231,27 @@ async function startBot() {
       if (!text) return;
       const lowerText = text.toLowerCase();
 
+      // ────────────────[إضافة استجابة الأوامر الثابتة المباشرة]────────────────
+      if ([".اوامر", ".الاوامر", ".أوامر", "اوامر", "الاوامر"].includes(lowerText)) {
+        const menuText = `
+🍷 *قائمة أوامر ${BOT_NAME}* 🍷
+
+• *.اوامر* : عرض قائمة الأوامر هذه
+• *.بوت* أو *بوت* : فحص حالة اتصال البوت
+• *المطور* : عرض معلومات وتفاصيل المطور
+• *الطقس [اسم المدينة]* : لمعرفة حالة الطقس
+
+_ملاحظة: يمكنك إرسال أي سؤال مباشر وسيجيبك الذكاء الاصطناعي مباشرة!_
+`;
+        await sock.sendMessage(chatId, { text: menuText }, { quoted: msg });
+        return;
+      }
+
+      if ([".بوت", "بوت", ".ping", "ping"].includes(lowerText)) {
+        await sock.sendMessage(chatId, { text: `🍷 أهلاً بك! بوت ${BOT_NAME} يعمل حالياً بنجاح وسرعة فائقة.` }, { quoted: msg });
+        return;
+      }
+
       // الاستجابة لأمر المطور
       if (["المطور", "مين عملك", "مين برمجك", "owner"].some(k => lowerText.includes(k))) {
         const p = path.join(__dirname, "developer.jpg");
